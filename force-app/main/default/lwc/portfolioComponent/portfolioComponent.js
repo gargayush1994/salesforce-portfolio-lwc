@@ -237,15 +237,7 @@ export default class PortfolioComponent extends LightningElement {
         this.scrollToSection('experience');
     }
 
-    handleLinkedInClick(event) {
-        event.preventDefault();
-        const url = event.currentTarget.dataset.url || event.target.dataset.url;
-        if (url) {
-            console.log('Opening LinkedIn URL:', url);
-            // Use window.open for external links in Experience Cloud
-            window.open(url, '_blank', 'noopener,noreferrer');
-        }
-    }
+
 
     toggleMobileMenu() {
         this.navMenuClass = this.navMenuClass === 'nav-menu' ? 'nav-menu active' : 'nav-menu';

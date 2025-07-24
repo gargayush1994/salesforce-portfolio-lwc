@@ -902,6 +902,26 @@ section:not(.hero)::before {
     display: inline-block;
 }
 
+/* External link styling */
+.external-link {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.external-link:hover {
+    color: #0070f3;
+    text-decoration: underline;
+}
+
+.external-link:after {
+    content: ' ↗';
+    font-size: 0.8em;
+    opacity: 0.6;
+    margin-left: 0.2rem;
+}
+
 /* Footer */
 .footer {
     background: #1f2937;
