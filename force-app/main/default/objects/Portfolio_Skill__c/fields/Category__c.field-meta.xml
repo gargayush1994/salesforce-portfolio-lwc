@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category__c</fullName>
+    <externalId>false</externalId>
+    <label>Category</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Salesforce Platform</fullName>
+                <default>false</default>
+                <label>Salesforce Platform</label>
+            </value>
+            <value>
+                <fullName>Development and APIs</fullName>
+                <default>false</default>
+                <label>Development &amp; APIs</label>
+            </value>
+            <value>
+                <fullName>Automation and Config</fullName>
+                <default>false</default>
+                <label>Automation &amp; Config</label>
+            </value>
+            <value>
+                <fullName>AI and Integration</fullName>
+                <default>false</default>
+                <label>AI &amp; Integration</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField> 

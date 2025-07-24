@@ -1,0 +1,44 @@
+# List of files to ignore when deploying
+**/*.rej
+**/*.orig
+**/*.file-meta.xml
+**/*.directory-meta.xml
+**/*.dup
+
+# LWC configuration files
+**/lwc/**/*.d.ts
+**/lwc/**/*.js.map
+
+# LWC Jest
+**/__tests__/**
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# IDE files
+.vscode/
+*.tmp
+*.swp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# HTML and other static files that aren't part of deployment
+index.html
+script.js
+styles.css
+profile-photo.jpg
+README.md 
