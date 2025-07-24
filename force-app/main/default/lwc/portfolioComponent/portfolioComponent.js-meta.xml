@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <isExposed>true</isExposed>
-    <description>Ayush Garg's Portfolio Component - A comprehensive showcase of professional experience, skills, and projects designed for Salesforce Experience Cloud (v3.0-animations)</description>
+    <description>Ayush Garg's Portfolio Component - A comprehensive showcase of professional experience, skills, and projects designed for Salesforce Experience Cloud (v3.1-domain-updated)</description>
     <masterLabel>Portfolio Component</masterLabel>
     <targets>
         <target>lightning__RecordPage</target>

@@ -1,6 +1,6 @@
 /**
- * Portfolio Component v3.0 - Animated Version
- * Cache Buster: 2024-12-19-animations
+ * Portfolio Component v3.1 - Domain Updated Version
+ * Cache Buster: 2024-12-19-domain-fix
  */
 import { LightningElement, track, wire } from 'lwc';
 import { loadStyle } from 'lightning/platformResourceLoader';
@@ -38,27 +38,35 @@ export default class PortfolioComponent extends LightningElement {
     // Wire methods to fetch data from Apex
     @wire(getExperienceData)
     wiredExperienceData({ error, data }) {
+        console.log('Experience Data Wire Called:', { data, error });
         if (data) {
+            console.log('Experience Data Loaded:', data.length, 'records');
             this.experienceData = data;
             this.checkLoadingComplete();
         } else if (error) {
+            console.error('Experience Data Error:', error);
             this.handleError('Error loading experience data', error);
         }
     }
 
     @wire(getSkillsData)
     wiredSkillsData({ error, data }) {
+        console.log('Skills Data Wire Called:', { data, error });
         if (data) {
+            console.log('Skills Data Loaded:', data.length, 'categories');
             this.skillCategories = data;
             this.checkLoadingComplete();
         } else if (error) {
+            console.error('Skills Data Error:', error);
             this.handleError('Error loading skills data', error);
         }
     }
 
     @wire(getProjectsData)
     wiredProjectsData({ error, data }) {
+        console.log('Projects Data Wire Called:', { data, error });
         if (data) {
+            console.log('Projects Data Loaded:', data.length, 'projects');
             // Process projects data to add display icons
             this.projectsData = data.map(project => ({
                 ...project,
@@ -195,12 +203,26 @@ export default class PortfolioComponent extends LightningElement {
     }
 
     scrollToSection(sectionId) {
-        const element = this.template.querySelector(`#${sectionId}`);
+        console.log('Scrolling to section:', sectionId);
+        const element = this.template.querySelector(`[id="${sectionId}"]`);
+        console.log('Found element:', element);
         if (element) {
             element.scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'start'
             });
+        } else {
+            console.error('Section not found:', sectionId);
+            // Fallback: try different selector approaches
+            const fallbackElement = this.template.querySelector(`section.${sectionId}`) || 
+                                   this.template.querySelector(`section[data-section="${sectionId}"]`);
+            if (fallbackElement) {
+                console.log('Using fallback element');
+                fallbackElement.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         }
     }
 
