@@ -3,13 +3,13 @@
  * @author Ayush Garg
  * @date 2025
  */
-public with sharing class PortfolioDataService {
+public without sharing class PortfolioDataService {
     
     /**
      * @description Retrieves all portfolio experience data with related achievements
      * @return List<Map<String, Object>> Experience data formatted for LWC
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getExperienceData() {
         try {
             List<Map<String, Object>> experienceList = new List<Map<String, Object>>();
@@ -63,7 +63,7 @@ public with sharing class PortfolioDataService {
      * @description Retrieves skills data grouped by category
      * @return List<Map<String, Object>> Skills data formatted for LWC
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getSkillsData() {
         try {
             Map<String, List<String>> skillsByCategory = new Map<String, List<String>>();
@@ -107,7 +107,7 @@ public with sharing class PortfolioDataService {
      * @description Retrieves project data from Portfolio_Project__c object
      * @return List<Map<String, Object>> Projects data formatted for LWC
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getProjectsData() {
         try {
             List<Portfolio_Project__c> projects = [

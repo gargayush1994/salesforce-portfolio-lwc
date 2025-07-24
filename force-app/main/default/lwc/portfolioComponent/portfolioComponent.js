@@ -1,6 +1,6 @@
 /**
  * Portfolio Component v3.1 - Domain Updated Version
- * Cache Buster: 2024-12-19-domain-fix
+ * Cache Buster: 2024-12-19-cache-clear-v2
  */
 import { LightningElement, track, wire } from 'lwc';
 import { loadStyle } from 'lightning/platformResourceLoader';
@@ -35,50 +35,42 @@ export default class PortfolioComponent extends LightningElement {
         return PORTFOLIO_RESOURCES + '/profile-photo.jpg';
     }
 
-    // Wire methods to fetch data from Apex
-    @wire(getExperienceData)
-    wiredExperienceData({ error, data }) {
-        console.log('Experience Data Wire Called:', { data, error });
-        if (data) {
-            console.log('Experience Data Loaded:', data.length, 'records');
-            this.experienceData = data;
-            this.checkLoadingComplete();
-        } else if (error) {
-            console.error('Experience Data Error:', error);
-            this.handleError('Error loading experience data', error);
-        }
+    // Load data imperatively to avoid caching issues
+    connectedCallback() {
+        this.loadAllData();
     }
-
-    @wire(getSkillsData)
-    wiredSkillsData({ error, data }) {
-        console.log('Skills Data Wire Called:', { data, error });
-        if (data) {
-            console.log('Skills Data Loaded:', data.length, 'categories');
-            this.skillCategories = data;
-            this.checkLoadingComplete();
-        } else if (error) {
-            console.error('Skills Data Error:', error);
-            this.handleError('Error loading skills data', error);
-        }
-    }
-
-    @wire(getProjectsData)
-    wiredProjectsData({ error, data }) {
-        console.log('Projects Data Wire Called:', { data, error });
-        if (data) {
-            console.log('Projects Data Loaded:', data.length, 'projects');
-            // Process projects data to add display icons
-            this.projectsData = data.map(project => ({
+    
+    async loadAllData() {
+        console.log('Loading all portfolio data...');
+        
+        try {
+            // Load experience data
+            const experienceData = await getExperienceData();
+            console.log('Experience Data Loaded:', experienceData.length, 'records');
+            this.experienceData = experienceData;
+            
+            // Load skills data  
+            const skillsData = await getSkillsData();
+            console.log('Skills Data Loaded:', skillsData.length, 'categories');
+            this.skillCategories = skillsData;
+            
+            // Load projects data
+            const projectsData = await getProjectsData();
+            console.log('Projects Data Loaded:', projectsData.length, 'projects');
+            this.projectsData = projectsData.map(project => ({
                 ...project,
                 displayIcon: this.getDisplayIcon(project.icon)
             }));
-            // Don't require projects for loading completion for now
-        } else if (error) {
-            // Projects are optional for now
-            console.warn('Projects data not available:', error);
-            this.projectsData = []; // Set empty array
+            
+            this.checkLoadingComplete();
+            
+        } catch (error) {
+            console.error('Error loading portfolio data:', error);
+            this.handleError('Error loading portfolio data', error);
         }
     }
+
+
 
     // Map Lightning icon names to Unicode symbols
     getDisplayIcon(iconName) {
@@ -204,23 +196,34 @@ export default class PortfolioComponent extends LightningElement {
 
     scrollToSection(sectionId) {
         console.log('Scrolling to section:', sectionId);
-        const element = this.template.querySelector(`[id="${sectionId}"]`);
+        
+        // Try multiple selector approaches for Shadow DOM compatibility
+        let element = this.template.querySelector(`#${sectionId}`) ||
+                     this.template.querySelector(`[id="${sectionId}"]`) ||
+                     this.template.querySelector(`section.${sectionId}`) ||
+                     this.template.querySelector(`section[data-section="${sectionId}"]`);
+        
         console.log('Found element:', element);
+        
         if (element) {
-            element.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        } else {
-            console.error('Section not found:', sectionId);
-            // Fallback: try different selector approaches
-            const fallbackElement = this.template.querySelector(`section.${sectionId}`) || 
-                                   this.template.querySelector(`section[data-section="${sectionId}"]`);
-            if (fallbackElement) {
-                console.log('Using fallback element');
-                fallbackElement.scrollIntoView({ 
+            // Add small delay to ensure DOM is ready
+            setTimeout(() => {
+                element.scrollIntoView({ 
                     behavior: 'smooth',
-                    block: 'start'
+                    block: 'start',
+                    inline: 'nearest'
+                });
+            }, 100);
+        } else {
+            console.warn('Section not found:', sectionId, '- trying manual scroll');
+            // Fallback: scroll to approximate position based on section order
+            const sectionOrder = ['home', 'about', 'experience', 'skills', 'projects', 'contact'];
+            const index = sectionOrder.indexOf(sectionId);
+            if (index > -1) {
+                const approximatePosition = index * window.innerHeight * 0.8;
+                window.scrollTo({
+                    top: approximatePosition,
+                    behavior: 'smooth'
                 });
             }
         }
